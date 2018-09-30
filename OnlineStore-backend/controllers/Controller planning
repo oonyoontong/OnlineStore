@@ -1,0 +1,41 @@
+Users
+    Create account
+    Validate email
+    change password
+    reset password
+    change email
+
+    Add Billing Details
+    Delete Billing Details
+    Change Preferred Billing
+
+    Add Shipping Address
+    Change Shipping Address
+    Delete Shipping Address
+    Change Preferred Shipping
+
+Shipping cart = Unsent Order, held on client side
+
+Vendor
+    Create Vendor
+    Change Vendor
+    Delete Vendor
+
+Product
+    Create Product
+        Create Product Group
+            Create Product Options
+    Change Product
+    Upload thumbnail
+    Upload images
+    Delete images
+    Delete product
+
+Order Details
+    Create Order Details
+
+Order
+    Change status
+    Change tracking number
+
+
