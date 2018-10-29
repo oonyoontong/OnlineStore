@@ -90,7 +90,7 @@ export default {
           .then(response => {
             this.status = 'success';
             this.$emit('successSubmit');
-            this.$store.commit('clearCartCount');
+            this.$store.commit('CLEAR_CART_COUNT');
 
             //console logs for you :)
             this.response = JSON.stringify(response, null, 2);

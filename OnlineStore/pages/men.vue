@@ -6,7 +6,7 @@
       <transition-group name="items" tag="section" class="content">
         <app-item
           v-for="(item, index) in mProducts"
-          key="item"
+          :key="item.id"
           :item="item"
           :index="index"
         />
@@ -16,9 +16,9 @@
 </template>
 
 <script>
-import AppSidebar from './../components/AppSidebar.vue';
-import AppMasthead from './../components/AppMasthead.vue';
-import AppItem from './../components/AppItem.vue';
+import AppSidebar from './../components/AppSidebar.vue'
+import AppMasthead from './../components/AppMasthead.vue'
+import AppItem from './../components/AppItem.vue'
 
 export default {
   components: {
@@ -26,19 +26,19 @@ export default {
     AppMasthead,
     AppItem
   },
-  data() {
+  data () {
     return {
       highprice: 300
-    };
+    }
   },
   computed: {
-    mProducts() {
-      return this.$store.getters.men.filter(el =>
-        this.$store.state.sale
+    mProducts () {
+      return this.$store.getters['products/men'].filter(el =>
+        this.$store.state.products.sale
           ? el.price < this.highprice && el.sale
           : el.price < this.highprice
-      );
+      )
     }
   }
-};
+}
 </script>

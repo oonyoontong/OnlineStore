@@ -3,44 +3,49 @@
     <app-masthead/>
     <div class="contain">
       <app-sidebar :pricerange.sync="highprice"/>
+      <app-sort-by/>
       <transition-group name="items" tag="section" class="content">
         <app-item
           v-for="(item, index) in products"
-          key="item"
+          :key="item.id"
           :item="item"
           :index="index"
         />
       </transition-group>
     </div>
   </main>
+
+  <!--TODO ADD SUPPORT FOR INFINITE SCROLLING https://scotch.io/tutorials/simple-asynchronous-infinite-scroll-with-vue-watchers-->
 </template>
 
 <script>
-import AppSidebar from './../components/AppSidebar.vue';
-import AppMasthead from './../components/AppMasthead.vue';
-import AppItem from './../components/AppItem.vue';
+import AppSidebar from './../components/AppSidebar.vue'
+import AppMasthead from './../components/AppMasthead.vue'
+import AppItem from './../components/AppItem.vue'
+import AppSortBy from './../components/AppSortBy.vue'
 
 export default {
   components: {
     AppSidebar,
     AppMasthead,
-    AppItem
+    AppItem,
+    AppSortBy
   },
-  data() {
+  data () {
     return {
       highprice: 300
-    };
+    }
   },
   computed: {
-    products() {
-      return this.$store.state.products.filter(el =>
-        this.$store.state.sale
+    products () {
+      return this.$store.state.products.products.filter(el =>
+        this.$store.state.products.sale
           ? el.price < this.highprice && el.sale
           : el.price < this.highprice
-      );
+      )
     }
   }
-};
+}
 </script>
 
 <style>

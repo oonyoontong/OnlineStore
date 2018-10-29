@@ -2,21 +2,39 @@
   <div class="capsule cart">
 
     <div v-if="cartTotal > 0">
+
       <h1>Cart</h1>
-      <div class="cartitems"
+
+      <!--<div class="cartitems"
         v-for="item in cart"
-        key="item">
+        :key="item.id">
+        &lt;!&ndash;TODO MOVE THIS TO COMPONENT, ADD A CLOSE BUTTON TO REMOVE FROM CART, ADD CHANGE QTY SELECT&ndash;&gt;
+        <div style="display: block;">
+          <button class="cancel-item"><span class="fa fa-window-close"></span></button>
+        </div>
         <div class="carttext">
           <h4>{{ item.name }}</h4>
-          <p>{{ item.price | usdollar }} x {{ item.count }}</p>
+          <p>{{ item.price | usdollar }}</p>
+          <p>Qty: {{item.count}}</p>
           <p>Total for this item: <strong>{{ item.price * item.count }}</strong></p>
         </div>
         <img class="cartimg" :src="`/${item.img}`" :alt="`Image of ${item.name}`">
-      </div>
+      </div>-->
+
+      <app-cart-item
+        v-for="item in cart"
+        :index="item.id"
+        :item="item"
+        :key="item.id"></app-cart-item>
+
       <div class="total">
         <h3>Total: {{ total | usdollar }}</h3>
       </div>
-      <app-checkout :total="total" @successSubmit="success = true"></app-checkout>
+      <!--TODO link to payment page-->
+      <b-button @click="checkUser">Proceed to payment</b-button>
+    <!--  <app-user-login :show-modal="showModal" v-on:toggle="toggleModal"></app-user-login>-->
+      <app-user-login v-show="showModal" @close="showModal = false"></app-user-login>
+      <!--<app-checkout :total="total" @successSubmit="success = true"></app-checkout>-->
     </div>
 
     <div v-else-if="cartTotal === 0 && success === false" class="empty">
@@ -31,42 +49,60 @@
       <p>Your order has been processed, it will be delivered shortly.</p>
     </div>
 
+
+
   </div>
 </template>
 
 <script>
-import AppCheckout from './../components/AppCheckout.vue';
-import AppSuccess from './../components/AppSuccess.vue';
+import AppCheckout from './../components/AppCheckout.vue'
+import AppSuccess from './../components/AppSuccess.vue'
+import AppUserLogin from './../components/AppUserLogin2.vue'
+import AppCartItem from './../components/AppCartItem.vue'
 
 export default {
-  data() {
+  data () {
     return {
-      success: false
-    };
+      success: false,
+      showModal: false
+    }
   },
   components: {
     AppCheckout,
-    AppSuccess
+    AppSuccess,
+    AppUserLogin,
+    AppCartItem
   },
   computed: {
-    cart() {
-      return this.$store.state.cart;
+    cart () {
+      return this.$store.state.products.cart
     },
-    cartTotal() {
-      return this.$store.state.cartTotal;
+    cartTotal () {
+      return this.$store.state.products.cartTotal
     },
-    total() {
+    total () {
       return Object.values(this.cart)
         .reduce((acc, el) => acc + (el.count * el.price), 0)
-        .toFixed(2);
+        .toFixed(2)
     }
   },
   filters: {
-    usdollar: function(value) {
-      return `$${value}`;
+    usdollar: function (value) {
+      return `$${value}`
+    }
+  },
+  methods: {
+    checkUser: function () {
+      // IF LOGGED IN, REDIRECT TO NEXT PAGE
+      // ELSE SHOW MODAL TO LOGIN
+      this.toggleModal()
+    },
+    toggleModal: function () {
+      console.log('TOGGLING MODAL:' + this.showModal)
+      this.showModal = true
     }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -94,6 +130,13 @@ export default {
   width: 500px;
 }
 
+.cancel-item {
+  padding: 0;
+  border: 0;
+  margin: 0;
+  float: right;
+}
+
 .carttext {
   width: 250px;
   float: left;
@@ -108,6 +151,7 @@ export default {
   width: 100px;
   border: 1px solid #ccc;
   float: right;
+  align-content: center;
 }
 
 .total {

@@ -1,72 +1,94 @@
 <template>
   <aside>
-    <div class="sidearea">
-      <label>Highest Price: <span>$</span><b-form-input type="number" v-model="pricerange"></b-form-input></label>
-      <b-form-input
+    <div class="sidearea price-range">
+      <h5><b>Price</b></h5>
+     <!-- <b-form-input
         id="pricerange"
         type="range"
-        v-model="pricerange"
-        :min="min"
-        :max="max"
-        step="1"
-        @input="syncPrice"
-      />
-      <span class="min">${{ min }}</span>
-      <span class="max">${{ max }}</span>
+        v-model="priceFilter"
+        :min="filters.minPrice"
+        :max="filters.maxPrice"
+        interval="1"
+        ></b-form-input>
+      <span class="min">${{ filters.minPrice }}</span>
+      <span class="max">${{ filters.maxPrice }}</span>
+-->
+
+      <div class="slider">
+        <no-ssr>
+          <vue-slider
+            id="pricerange"
+            v-model="priceFilter"
+            :min="filters.minPrice"
+            :max="filters.maxPrice"
+            :tooltip-dir="['top','top']"
+            tooltip="hover"></vue-slider>
+        </no-ssr>
+        <span class="min">${{ priceFilter[0] }} - ${{ priceFilter[1] }}</span>
+        <!--<span class="max">${{ filters.maxPrice }}</span>-->
+      </div>
+
+      <button id="price-button">Set</button>
+
     </div>
 
-    <app-switch v-if="!sale" />
-
     <div class="sidearea callout">
-      <h4>Categories</h4>
+      <h5><b>Categories</b></h5>
+
       <div>
-        <b-form-checkbox-group stacked type="checkbox" v-model="cat_selected" :options="cats"></b-form-checkbox-group>
+        <b-form-checkbox-group stacked plain type="checkbox" v-model="cats_selected" :options="filters.cats"></b-form-checkbox-group>
       </div>
     </div>
 
     <div class="sidearea callout">
-      <h4>Special Sale!</h4>
+      <h5><b>Special Sale!</b></h5>
       <p>Shop now because half our items are greatly reduced</p>
     </div>
 
     <div class="sidearea callout">
-      <h4>Contact Us</h4>
+      <h5><b>Contact Us</b></h5>
       <p>Questions? Call us at 1-888-555-SHOP, we're happy to be of service.</p>
     </div>
   </aside>
 </template>
 
 <script>
-import AppSwitch from './AppSwitch.vue';
+import AppSwitch from './AppSwitch.vue'
 
 export default {
   props: {
     sale: {
       type: Boolean,
       default: false
-    },
-    pricerange: {
-      type: [Number, String],
-      default: 300
     }
   },
-  data () {
-    return {
-      min: 0,
-      max: 400,
-      cat_selected: [],
-      cats: ['Shirts', 'Pants', 'Jeans', 'Shoes', 'Accessories', 'T-Shirts', 'Polo Shirts', 'Hoodies & Jackets']
-    };
+  computed: {
+    priceFilter: {
+      get () {
+        return this.$store.state.products.filters.priceFilter
+      },
+      set (value) {
+        this.$store.commit('products/UPDATE_FILTERS', ['priceFilter', value])
+      }
+    },
+    cats_selected: {
+      get () {
+        return this.$store.state.products.filters.cats_selected
+      },
+      set (value) {
+        this.$store.commit('products/UPDATE_FILTERS', ['cats_selected', value])
+      }
+    },
+    filters () {
+      return this.$store.state.products.filters
+    }
   },
   components: {
     AppSwitch
   },
   methods: {
-    syncPrice () {
-      this.$emit('update:pricerange', this.pricerange)
-    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -74,6 +96,10 @@ aside {
   background: white;
   float: left;
   padding: 20px;
+}
+
+.slider {
+  padding-bottom: 20px;
 }
 
 .sidearea {
@@ -96,6 +122,13 @@ label {
   text-align: center;
 }
 
+#price-button {
+  float: right;
+  font-size: small;
+  padding: 5px 15px 5px 15px;
+  margin: 5px 0px 10px;
+}
+
 /*--input range--*/
 .sidearea:first-of-type {
   padding-bottom: 40px;
@@ -111,15 +144,8 @@ span {
   font-family: 'Barlow', sans-serif;
 }
 
-.max {
-  font-size: 12px;
-  float: right;
-  color: #565656;
-}
-
 .min {
   float: left;
-  font-size: 12px;
   color: #565656;
 }
 </style>

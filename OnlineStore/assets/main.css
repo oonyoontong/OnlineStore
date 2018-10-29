@@ -70,7 +70,6 @@ button {
   color: #3e64ea;
   border: 1px solid #3e64ea;
   font-family: 'Barlow', sans-serif;
-  text-transform: uppercase;
   margin: 10px;
   transition: 0.15s all ease-out;
 }

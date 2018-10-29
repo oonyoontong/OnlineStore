@@ -8,19 +8,19 @@
 </template>
 
 <script>
-  import AppMasthead from './../../components/AppMasthead.vue';
-  // On open, getData of this product from database, populate the fields.
-  export default {
+  import AppMasthead from './../../components/AppMasthead.vue'
+// On open, getData of this product from database, populate the fields.
+export default {
     components: {
       AppMasthead
     },
-    data() {
+    data () {
       return {
-      };
+      }
     },
     computed: {
     }
-  };
+  }
 </script>
 
 <style>
