@@ -28,7 +28,7 @@
         <!--<span class="max">${{ filters.maxPrice }}</span>-->
       </div>
 
-      <button id="price-button">Set</button>
+      <button id="price-button" @click="setFilter">Set</button>
 
     </div>
 
@@ -87,6 +87,9 @@ export default {
     AppSwitch
   },
   methods: {
+    setFilter () {
+      // TODO setFilter and fetch new product list
+    }
   }
 }
 </script>

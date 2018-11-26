@@ -36,9 +36,9 @@
 </template>
 
 <script>
-import { Card, createToken } from 'vue-stripe-elements-plus';
-import AppLoader from './AppLoader.vue';
-import axios from 'axios';
+import { Card, createToken } from 'vue-stripe-elements-plus'
+import AppLoader from './AppLoader.vue'
+import axios from 'axios'
 
 export default {
   components: {
@@ -47,15 +47,14 @@ export default {
   },
   props: {
     total: {
-      type: [Number, String],
-      default: '50.00'
+      type: [Number, String]
     },
     success: {
       type: Boolean,
       default: false
     }
   },
-  data() {
+  data () {
     return {
       submitted: false,
       complete: false,
@@ -66,19 +65,19 @@ export default {
         // see https://stripe.com/docs/stripe.js#element-options for details
       },
       stripeEmail: ''
-    };
+    }
   },
   methods: {
-    pay() {
+    pay () {
       createToken().then(data => {
-        this.submitted = true;
-        console.log(data.token); //this is a token we would use for the stripeToken below
+        this.submitted = true
+        console.log(data.token) // this is a token we would use for the stripeToken below
         axios
           .post(
             'https://sdras-stripe.azurewebsites.net/api/charge?code=zWwbn6LLqMxuyvwbWpTFXdRxFd7a27KCRCEseL7zEqbM9ijAgj1c1w==',
             {
               stripeEmail: this.stripeEmail,
-              stripeToken: 'tok_visa', //testing token
+              stripeToken: 'tok_visa', // testing token
               stripeAmt: this.total
             },
             {
@@ -88,31 +87,31 @@ export default {
             }
           )
           .then(response => {
-            this.status = 'success';
-            this.$emit('successSubmit');
-            this.$store.commit('CLEAR_CART_COUNT');
+            this.status = 'success'
+            this.$emit('successSubmit')
+            this.$store.commit('CLEAR_CART_COUNT')
 
-            //console logs for you :)
-            this.response = JSON.stringify(response, null, 2);
-            console.log(this.response);
+            // console logs for you :)
+            this.response = JSON.stringify(response, null, 2)
+            console.log(this.response)
           })
           .catch(error => {
-            this.status = 'failure';
+            this.status = 'failure'
 
-            //console logs for you :)
-            this.response = 'Error: ' + JSON.stringify(error, null, 2);
-            console.log(this.response);
-          });
-      });
+            // console logs for you :)
+            this.response = 'Error: ' + JSON.stringify(error, null, 2)
+            console.log(this.response)
+          })
+      })
     },
-    clearCart() {
-      this.submitted = false;
-      this.status = '';
-      this.complete = false;
-      this.response = '';
+    clearCart () {
+      this.submitted = false
+      this.status = ''
+      this.complete = false
+      this.response = ''
     }
   }
-};
+}
 </script>
 
 <style scoped>

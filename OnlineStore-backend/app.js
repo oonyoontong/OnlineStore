@@ -27,7 +27,6 @@ app.use(function (req, res, next) {
     // Pass to next layer of middleware
     next();
 });
-var x = true;
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -38,9 +37,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 //Routing for endpoints
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var productsRouter = require('./routes/products');
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-
+app.use('/products', productsRouter);
 module.exports = app;
 
 /**

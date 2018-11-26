@@ -4,7 +4,7 @@ const state = () => ({
   cartTotal: 0,
   cart: {},
   filters: {
-    cats: ['Shirts', 'Pants', 'Jeans', 'Shoes', 'Accessories', 'T-Shirts', 'Polo Shirts', 'Hoodies & Jackets'],
+    cats: [],
     maxPrice: 400,
     minPrice: 0,
     cats_selected: [],
@@ -160,6 +160,7 @@ const getters = {
 const mutations = {
   UPDATE_FILTERS: (state, [key, value]) => {
     Vue.set(state.filters, key, value)
+    console.log('Changing filters')
     console.log(state.filters[key])
   },
   switchSale: state => {
@@ -192,7 +193,12 @@ const mutations = {
 }
 
 const actions = {
-
+  async getFilterCategories ({commit}) {
+    const payload = await this.$axios.$get('http://localhost:5000/products/get_categories')
+    commit('UPDATE_FILTERS', ['cats', payload.cats.filter(function (catName) {
+      return (catName !== 'women') && (catName !== 'men')
+    })])
+  }
 }
 
 export default {

@@ -14,7 +14,7 @@ var Schema = mongoose.Schema;
 
 var OrdersSchema = new Schema({
     user_id: {type: Schema.ObjectId, ref: 'Users'},
-    billingDetails_id: {type: Schema.ObjectId, ref: 'BillingDetails', required},
+    billingDetails_id: {type: Schema.ObjectId, ref: 'BillingDetails', required:true},
     dateCreated: {type: Date, default: Date.now()},
     trackingNumber: String,
     status: {type: Number, min:0, max: 4},

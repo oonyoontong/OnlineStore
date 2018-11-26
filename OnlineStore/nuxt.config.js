@@ -25,7 +25,7 @@ module.exports = {
       }
     ]
   },
-  css: ['~/assets/main.css'],
+  css: ['~/assets/main.css', 'vuejs-dialog/dist/vuejs-dialog.min.css'],
   /*
   ** Customize the progress bar color
   */
@@ -44,6 +44,10 @@ module.exports = {
   plugins: [
     {
       src: '~plugins/vue-slider-component.js',
+      ssr: false
+    },
+    {
+      src: '~plugins/vuejs-dialog.js',
       ssr: false
     }
   ],

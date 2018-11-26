@@ -10,7 +10,7 @@
 </template>
 
 <script>
-  import AppFooter from './../components/AppFooter.vue';
+  import AppFooter from './../components/AppFooter.vue'
   export default {
     components: {
       AppFooter

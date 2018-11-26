@@ -2,12 +2,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var ProductsSchema = new Schema({
-    vendor_id: {type: Schema.ObjectId, ref: 'Vendor'},
     SKU: String,
-    categories: [{
-        type: Schema.ObjectId,
-        ref: 'Categories'
-    }],
+    categories: [{type: Schema.ObjectId, ref: 'Categories'}],
     name: String,
     description: String,
     MSRP: Number,

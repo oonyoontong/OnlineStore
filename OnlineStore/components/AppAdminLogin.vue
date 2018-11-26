@@ -9,11 +9,6 @@
               hide-header-close
               hide-footer>
 
-      <b-nav justified tabs>
-        <b-nav-item active>Login</b-nav-item>
-        <b-nav-item>Register</b-nav-item>
-      </b-nav>
-
       <form @submit="handleSubmit">
         <b-form-input type="text"
                       name="user"
@@ -48,8 +43,14 @@ export default {
   },
   methods: {
     checkLogin (user, password) {
-      Promise()
-
+      if (user === 'admin' && password === 'admin') {
+        this.$router.push('/admin/product')
+      } else {
+        this.$toast.error('Wrong credentials!', {
+          type: 'error',
+          singleton: true
+        })
+      }
     },
     handleHide (evt) {
       evt.preventDefault()
