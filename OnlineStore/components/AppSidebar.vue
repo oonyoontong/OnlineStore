@@ -24,7 +24,7 @@
             :tooltip-dir="['top','top']"
             tooltip="hover"></vue-slider>
         </no-ssr>
-        <span class="min">${{ priceFilter[0] }} - ${{ priceFilter[1] }}</span>
+        <span class="min">${{ priceFilter[0].toFixed(2) }} - ${{ priceFilter[1].toFixed(2) }}</span>
         <!--<span class="max">${{ filters.maxPrice }}</span>-->
       </div>
 
@@ -77,6 +77,7 @@ export default {
       },
       set (value) {
         this.$store.commit('products/UPDATE_FILTERS', ['cats_selected', value])
+        this.setFilter()
       }
     },
     filters () {
@@ -89,6 +90,7 @@ export default {
   methods: {
     setFilter () {
       // TODO setFilter and fetch new product list
+      this.$store.dispatch('products/getFilteredProducts')
     }
   }
 }

@@ -8,7 +8,7 @@
       <b-list-group-item class="product-tab" v-for="item in products" :key="item.name">
         <nuxt-link :to="{name: 'admin-product-id', params: {id: item.name}}" style="text-decoration: none; color: black">
           <span>{{item.name}}</span>
-          <img class='product-img' :src="`/${item.img}`" :alt="`Image of ${item.name}`">
+          <img class='product-img' :src="'http://localhost:5000/products/image/'+item.thumbnail" :alt="`Image of ${item.name}`">
         </nuxt-link>
           <b-btn class="remove-btn" @click="handleRemove(item.name)">Remove</b-btn>
 

@@ -38,11 +38,12 @@ export default {
   },
   computed: {
     products () {
-      return this.$store.state.products.products.filter(el =>
+      /*return this.$store.state.products.products.filter(el =>
         this.$store.state.products.sale
           ? el.price < this.highprice && el.sale
           : el.price < this.highprice
-      )
+      )*/
+      return this.$store.state.products.products
     }
   }
 }

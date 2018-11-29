@@ -23,7 +23,6 @@
 
       <app-cart-item
         v-for="item in cart"
-        :index="item.id"
         :item="item"
         :key="item.id"></app-cart-item>
 

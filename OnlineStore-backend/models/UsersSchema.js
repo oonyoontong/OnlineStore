@@ -15,8 +15,8 @@ var UsersSchema = new Schema({
             //Source: emailregex.com
             validate: [/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, 'email in wrong format'],
     },
-    passwordHash: {type: String, required: true, select: false},
-    passwordSalt: {type: String, required: true, select: false},
+    passwordHash: {type: String, required: true},
+    passwordSalt: {type: String, required: true},
     //Regex allows for alphabets + whitespace
     firstName: {type: String, validate: [/[a-zA-Z ]/, 'No digits or special characters allowed']},
     lastName: {type: String, validate: [/[a-zA-Z ]/, 'No digits or special characters allowed']},

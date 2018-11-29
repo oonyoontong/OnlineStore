@@ -32,6 +32,7 @@
           },
           set () {
             this.$store.commit('products/UPDATE_FILTERS', ['sale', !this.filters.sale])
+            this.$store.dispatch('products/getFilteredProducts')
           }
         },
         filters () {
@@ -43,6 +44,7 @@
           },
           set (value) {
             this.$store.commit('products/UPDATE_FILTERS', ['sortBy', value])
+            this.$store.dispatch('products/getFilteredProducts')
           }
         }
       }

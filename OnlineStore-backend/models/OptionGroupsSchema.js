@@ -8,6 +8,7 @@ var OptionGroupsSchema = new Schema({
     product_options: [{
         name: String,
         priceDifference: Number,
+        quantity: Number
     }],
 });
 

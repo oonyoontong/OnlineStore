@@ -10,7 +10,8 @@
 
       <div class="form-register" :class="{ 'active': active === 'register' }" id="form-register">
         <div class="error-message" v-text="registerError"></div>
-        <b-form-input type="text" name="name" placeholder="Name" v-model="registerName" @keyup.enter="submit('register', $event)"></b-form-input>
+        <b-form-input type="text" name="firstName" placeholder="First Name" v-model="registerFirstName" @keyup.enter="submit('register', $event)"></b-form-input>
+        <b-form-input type="text" name="lastName" placeholder="Last Name" v-model="registerLastName" @keyup.enter="submit('register', $event)"></b-form-input>
         <b-form-input type="text" name="email" placeholder="Email" v-model="registerEmail" @keyup.enter="submit('register', $event)"></b-form-input>
         <b-form-input type="password" name="password" placeholder="Password" v-model="registerPassword" @keyup.enter="submit('register', $event)"></b-form-input>
         <b-form-input type="password" name="reconfirm" placeholder="Reconfirm Password" v-model="registerReconfirm" @keyup.enter="submit('register', $event)"></b-form-input>
@@ -51,7 +52,8 @@ export default {
       loginSubmit: 'Login',
 
       // Modal text fields
-      registerName: '',
+      registerFirstName: '',
+      registerLastName: '',
       registerEmail: '',
       registerPassword: '',
       registerReconfirm: '',
@@ -166,7 +168,7 @@ export default {
     visibility: hidden;
     cursor: pointer;
     overflow-y: auto;
-    z-index: 3;
+    z-index: 9999;
     background-color: rgba(17, 17, 17, .9);
     -webkit-transition: all 0.25s linear;
     -moz-transition: all 0.25s linear;

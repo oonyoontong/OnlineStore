@@ -52,7 +52,7 @@ module.exports = {
     }
   ],
   axios: {
-    baseURL: 'localhost:5000/api/v1'
+    baseURL: 'http://localhost:5000'
   },
   auth: {
     strategies: {
@@ -76,5 +76,8 @@ module.exports = {
   toast: {
     position: 'top-right',
     duration: 2000
+  },
+  env: {
+    baseURL: 'http://localhost:5000'
   }
 }

@@ -11,7 +11,7 @@
           <p>Total for this item: <strong>${{ item.price * item.count }}</strong></p>
         </b-col>
         <b-col>
-          <img class="cartimg" :src="`/${item.img}`" :alt="`Image of ${item.name}`">
+          <img class="cartimg" :src="'http://localhost:5000/products/image/'+item.thumbnail" :alt="`Image of ${item.name}`">
         </b-col>
       </b-row>
     </b-container>
@@ -22,10 +22,6 @@
     props: {
       item: {
         type: Object,
-        required: true
-      },
-      index: {
-        type: Number,
         required: true
       }
     },

@@ -15,7 +15,7 @@
         <b-form-input
           id="sku"
           type="text"
-          v-model="form.sku"
+          v-model="form.SKU"
           required
           :disabled="!canEdit"
           placeholder="Enter SKU">
@@ -55,11 +55,7 @@
           <b-dropdown-item v-for="(cat, index) in categoryList" :key="index" @click="addCat(cat)">
             {{cat}}
           </b-dropdown-item>
-
-
         </b-dropdown>
-
-
       </b-form-group>
 
       <b-form-group
@@ -79,9 +75,24 @@
       </b-form-group>
 
       <b-form-group
+        label="MSRP"
+      >
+        <b-input-group class="price" prepend="$">
+          <b-form-input
+            id="msrp"
+            type="number"
+            required
+            :disabled="!canEdit"
+            v-model="form.MSRP"
+            placeholder="Enter MSRP">
+          </b-form-input>
+        </b-input-group>
+      </b-form-group>
+
+      <b-form-group
         label="Base Price"
         >
-        <b-input-group class="price" prepend="$" append=".00">
+        <b-input-group class="price" prepend="$">
           <b-form-input
             id="price"
             type="number"
@@ -94,6 +105,51 @@
       </b-form-group>
 
       <b-form-group
+        id="product-dimension-group"
+        label="Product Dimensions"
+        label-for="product-dimension"
+        style="width:30%;">
+        <b-input-group append="mm" class="dimension-input">
+          <b-form-input
+            id="dimensionX"
+            type="number"
+            v-model="form.dimensionX"
+            required
+            >
+          </b-form-input>
+        </b-input-group>
+        <b-input-group append="mm" class="dimension-input">
+          <b-form-input
+            id="dimensionX"
+            type="number"
+            v-model="form.dimensionY"
+            required
+          >
+          </b-form-input>
+        </b-input-group>
+        <b-input-group append="mm" class="dimension-input">
+          <b-form-input
+            id="dimensionX"
+            type="number"
+            v-model="form.dimensionZ"
+            required
+          >
+          </b-form-input>
+        </b-input-group>
+      </b-form-group>
+
+      <b-form-group
+        id="product-image-group"
+        label="Upload Thumbnail"
+        label-for="product-image">
+        <b-form-file
+          accept="image/*"
+          v-model="form.thumbnail"
+          required>
+        </b-form-file>
+      </b-form-group>
+
+      <b-form-group
         label="Option Groups"
         :disabled="!canEdit"
         >
@@ -102,17 +158,18 @@
           <b-form-input
             type="text"
             class="options-group-name"
+            required
             v-model="optionGroup.name"
             placeholder="Enter Option Group Name, E.g. Size, Colour">
           </b-form-input>
 
-          <div v-for="(option, key) in optionGroup.options">
+          <div v-for="(option, key) in optionGroup.product_options">
             <div class="option">
-              <b-button v-show="optionGroup.options.length > 1" class="option-close" v-on:click="optionGroup.options.splice(key,1)"><i class="fa fa-times"></i></b-button>
-            <b-form-input class="option-name" v-model="option.name" placeholder="Enter Options">
+              <b-button v-show="optionGroup.product_options.length > 1" class="option-close" v-on:click="optionGroup.product_options.splice(key,1)"><i class="fa fa-times"></i></b-button>
+            <b-form-input class="option-name" v-model="option.name" placeholder="Enter Options" required>
             </b-form-input>
-            <b-input-group class="option-price" prepend="$" append=".00">
-              <b-form-input v-model="option.price" placeholder="Enter Price Difference">
+            <b-input-group class="option-price" prepend="$">
+              <b-form-input v-model="option.priceDifference" placeholder="Enter Price Difference" required>
               </b-form-input>
             </b-input-group>
             </div>
@@ -126,7 +183,7 @@
         </b-input-group-append>
         </b-form-group>
 
-      <b-button type="submit" variant="primary">Submit</b-button>
+      <b-button type="submit" variant="primary" @submit="handleSubmit">Submit</b-button>
 
     </b-form>
   </div>
@@ -142,12 +199,13 @@
         canEdit: true,
         form: {
           categories: [],
+          thumbnail: '',
           optionGroups: [
             {
               name: '',
-              options: [
+              product_options: [
                 {
-                  price: '',
+                  priceDifference: '0',
                   name: ''
                 }
               ]
@@ -161,7 +219,7 @@
     },
     methods: {
       async fetchCategories () {
-        const payload = await this.$axios.$get('http://localhost:5000/products/get_categories')
+        const payload = await this.$axios.$get('/products/get_categories')
         this.categoryList = payload.cats
       },
       addCat (cat) {
@@ -173,24 +231,39 @@
         this.categoryList.push(cat)
         this.form.categories.splice(this.form.categories.indexOf(cat), 1)
       },
-      handleSubmit () {
+      async handleSubmit (evt) {
+        evt.preventDefault()
+        let formData = new FormData()
+        for (var key in this.form) {
+          formData.append(key, this.form[key])
+        }
+        formData.set('optionGroups', JSON.stringify(this.form.optionGroups))
+        var response = await this.$axios.$post('/products/create_new_product', formData)
+        if (response) {
+          // REDIRECT TO HOMEPAGE
+          // this.$router.push('./')
+          console.log(response)
+        } else {
+          // THROW UP ERROR
+          console.log(response)
+        }
       },
       handleReset () {
       },
       addOptionGroup () {
         this.form.optionGroups.push({
           name: '',
-          options: [
+          product_options: [
             {
-              price: '',
+              priceDifference: '0',
               name: ''
             }
           ]
         })
       },
       addOption (key) {
-        this.form.optionGroups[key].options.push({
-          price: '',
+        this.form.optionGroups[key].product_options.push({
+          priceDifference: '0',
           name: ''
         })
       },
@@ -248,5 +321,8 @@
     margin: 0;
     border: 0;
     padding-left: 5px;
+  }
+  .dimension-input {
+    padding-bottom: 10px;
   }
 </style>

@@ -2,8 +2,9 @@
   <div class="item" >
     <nuxt-link style="text-decoration: none; color: black" :to="{name: 'product-id', params: {id: item.name}}">
     <p>{{ item.name }}</p>
-      <span class="salepill" v-if="item.sale">Sale</span>
-      <img :src="`/${item.img}`" :alt="`Image of ${item.name}`">
+      <span class="salepill" v-if="item.price < item.MSRP">Sale</span>
+      <!--<img :src="`/${item.thumbnail}`" :alt="`Image of ${item.name}`">-->
+      <img :src="'http://localhost:5000/products/image/'+item.thumbnail" :alt="`Image of ${item.name}`">
       <p>{{ item.price | usdollar }}</p>
 
       <!--TODO fix rating system-->

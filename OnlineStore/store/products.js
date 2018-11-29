@@ -17,143 +17,143 @@ const state = () => ({
       id: 1,
       name: 'Khaki Suede Polish Work Boots',
       price: 149.99,
-      category: 'women',
+      categories: ['women'],
       sale: true,
       article: 'shoe',
       rating: 4,
       rating_count: 10,
-      img: 'shoe1.png'
+      thumbnail: 'shoe1.png'
     },
     {
       id: 2,
       name: 'Camo Fang Backpack Jungle',
       price: 39.99,
-      category: 'women',
+      categories: ['women'],
       sale: false,
       article: 'jacket',
       rating: 3,
       rating_count: 10,
-      img: 'jacket1.png'
+      thumbnail: 'jacket1.png'
     },
     {
       id: 3,
       name: 'Parka and Quilted Liner Jacket',
       price: 49.99,
-      category: 'men',
+      categories: ['men'],
       sale: true,
       article: 'jacket',
       rating: 3.5,
       rating_count: 10,
-      img: 'jacket2.png'
+      thumbnail: 'jacket2.png'
     },
     {
       id: 4,
       name: 'Cotton Black Cap',
       price: 12.99,
-      category: 'men',
+      categories: ['men', 'hat'],
       sale: true,
       article: 'hats',
       rating: 2.6,
       rating_count: 10,
-      img: 'hat1.png'
+      thumbnail: 'hat1.png'
     },
     {
       id: 5,
       name: 'Knit Sweater with Zips',
       price: 29.99,
-      category: 'women',
+      categories: ['women'],
       sale: false,
       article: 'sweater',
       rating: 2.1,
       rating_count: 10,
-      img: 'sweater1.png'
+      thumbnail: 'sweater1.png'
     },
     {
       id: 6,
       name: 'Long Linen-blend Shirt',
       price: 18.99,
-      category: 'men',
+      categories: ['men'],
       sale: false,
       article: 'shirt',
       rating: 4.5,
       rating_count: 10,
-      img: 'shirt1.png'
+      thumbnail: 'shirt1.png'
     },
     {
       id: 7,
       name: 'Knit Orange Sweater',
       price: 28.99,
-      category: 'men',
+      categories: ['men'],
       sale: false,
       article: 'sweater',
       rating: 3.7,
       rating_count: 10,
-      img: 'sweater2.png'
+      thumbnail: 'sweater2.png'
     },
     {
       id: 8,
       name: 'Cotton Band-collar Blouse',
       price: 49.99,
-      category: 'men',
+      categories: ['men'],
       sale: false,
       article: 'shirt',
       rating: 4,
       rating_count: 10,
-      img: 'shirt2.png'
+      thumbnail: 'shirt2.png'
     },
     {
       id: 9,
       name: 'Camo Fang Backpack Jungle',
       price: 59.99,
-      category: 'women',
+      categories: ['women'],
       sale: true,
       article: 'jacket',
       rating: 1,
       rating_count: 10,
-      img: 'jacket3.png'
+      thumbnail: 'jacket3.png'
     },
     {
       id: 10,
       name: 'Golden Pilot Jacket',
       price: 129.99,
-      category: 'women',
+      categories: ['women'],
       sale: false,
       article: 'jacket',
       rating: 0,
       rating_count: 10,
-      img: 'jacket4.png'
+      thumbnail: 'jacket4.png'
     },
     {
       id: 11,
       name: 'Spotted Patterned Sweater',
       price: 80.99,
-      category: 'women',
+      categories: ['women'],
       sale: false,
       article: 'jacket',
       rating: 2,
       rating_count: 10,
-      img: 'sweater4.png'
+      thumbnail: 'sweater4.png'
     },
     {
       id: 12,
       name: 'Double Knit Sweater',
       price: 59.99,
-      category: 'men',
+      categories: ['men', 'Sweater'],
       sale: true,
       article: 'jacket',
       rating: 2,
       rating_count: 10,
-      img: 'sweater5.png'
+      thumbnail: 'sweater5.png'
     }
   ]
 })
 
 const getters = {
   women: state => {
-    return filter(state.products, 'category', 'women')
+    return filter(state.products, 'categories', 'women')
   },
   men: state => {
-    return filter(state.products, 'category', 'men')
+    return filter(state.products, 'categories', 'men')
   }
 }
 
@@ -162,10 +162,10 @@ const mutations = {
     Vue.set(state.filters, key, value)
     console.log('Changing filters')
     console.log(state.filters[key])
-  },
+  }, /*
   switchSale: state => {
     state.sale = !state.sale
-  },
+  }, */
   CLEAR_CART_COUNT: state => {
     state.cartTotal = 0
   },
@@ -189,15 +189,54 @@ const mutations = {
       state.cartTotal = state.cartTotal - state.cart[item.id].count
       Vue.delete(state.cart, item.id)
     }
+  },
+  UPDATE_PRODUCT_LIST: (state, productList) => {
+    console.log('updating product list')
+    state.products = productList
   }
 }
 
 const actions = {
-  async getFilterCategories ({commit}) {
-    const payload = await this.$axios.$get('http://localhost:5000/products/get_categories')
-    commit('UPDATE_FILTERS', ['cats', payload.cats.filter(function (catName) {
+  async getFilterCategories (context) {
+    const payload = await this.$axios.$get('/products/get_categories')
+    context.commit('UPDATE_FILTERS', ['cats', payload.cats.filter(function (catName) {
       return (catName !== 'women') && (catName !== 'men')
     })])
+  },
+  async getAllProducts (context) {
+    try {
+      console.log('Getting all products')
+      const payload = await this.$axios.$get('/products/')
+      if (payload !== []) {
+        context.commit('UPDATE_PRODUCT_LIST', payload)
+        console.log(payload)
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  },
+  async getMinMaxPrice (context) {
+    try {
+      const payload = await this.$axios.$get('/products/filters/maxminprice')
+      context.commit('UPDATE_FILTERS', ['maxPrice', payload.max])
+      context.commit('UPDATE_FILTERS', ['minPrice', payload.min])
+    } catch (err) {
+      console.log(err)
+    }
+  },
+  async getFilteredProducts ({state, commit}) {
+    try {
+      const payload = await this.$axios.$post(
+        '/products/',
+        state.filters
+      )
+      if (payload !== []) {
+        commit('UPDATE_PRODUCT_LIST', payload)
+        console.log(payload)
+      }
+    } catch (err) {
+      console.log(err)
+    }
   }
 }
 
@@ -207,4 +246,4 @@ export default {
   mutations,
   actions
 }
-const filter = (array, key, value) => array.filter(item => item[key] === value)
+const filter = (array, key, value) => array.filter(item => !item[key].indexOf(value))
